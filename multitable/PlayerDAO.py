@@ -33,10 +33,14 @@ class PlayerDAO():
             KeyConditionExpression=Key(PLAYER_TEAM).eq(team_name)
         )["Items"]
 
-    def get_by_salary(self, team_name):
-        return self.player_table.query(
-            IndexName=SALARY_INDEX,
-            KeyConditionExpression=Key(PLAYER_TEAM).eq(team_name),
-            ScanIndexForward=False,
-            Limit=1
-        )["Items"]
+    @staticmethod
+    def _from_dynamo_item(dynamo_item):
+        return {k: dynamo_item[k] for k in (PLAYER_NAME, PLAYER_TEAM, SALARY)}
+
+    # def get_by_salary(self, team_name):
+    #     return self.player_table.query(
+    #         IndexName=SALARY_INDEX,
+    #         KeyConditionExpression=Key(PLAYER_TEAM).eq(team_name),
+    #         ScanIndexForward=False,
+    #         Limit=1
+    #     )["Items"]
